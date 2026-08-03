@@ -1,0 +1,51 @@
+diff --git a/src/widget.cc b/src/widget.cc
+index 2ea7eee..3000856 100644
+--- a/src/widget.cc
++++ b/src/widget.cc
+@@ -1348,6 +1348,28 @@ Widget::event_scroll_decelerate(GtkEventControllerScroll* controller,
+         // FIXMEgtk4
+ }
+ 
++/* Whether the gesture's current sequence comes from a touchscreen. */
++static bool
++sequence_is_touch(GtkGestureClick* gesture)
++{
++        auto const sequence = gtk_gesture_single_get_current_sequence(GTK_GESTURE_SINGLE(gesture));
++        auto const event = gtk_gesture_get_last_event(GTK_GESTURE(gesture), sequence);
++        if (!event)
++                return false;
++
++        switch (gdk_event_get_event_type(event)) {
++        case GDK_TOUCH_BEGIN:
++        case GDK_TOUCH_UPDATE:
++        case GDK_TOUCH_END:
++                return true;
++        default:
++                break;
++        }
++
++        auto const device = gdk_event_get_device(event);
++        return device && gdk_device_get_source(device) == GDK_SOURCE_TOUCHSCREEN;
++}
++
+ void
+ Widget::gesture_click_pressed(GtkGestureClick* gesture,
+                               int press_count,
+@@ -1360,6 +1382,17 @@ Widget::gesture_click_pressed(GtkGestureClick* gesture,
+         // FIXMEgtk4 why does gtk4 not do that automatically?
+         gtk_widget_grab_focus(gtk());
+ 
++        // Touch sequences are swallowed here without ever producing anything
++        // useful, which starves the pan gesture of a containing
++        // GtkScrolledWindow, so a finger drag cannot scroll the scrollback.
++        // Deny them so they propagate and the scrolled window can kinetically
++        // scroll instead. The long press gesture is a separate gesture and is
++        // unaffected, so the touch context menu keeps working.
++        if (sequence_is_touch(gesture)) {
++                gtk_gesture_set_state(GTK_GESTURE(gesture), GTK_EVENT_SEQUENCE_DENIED);
++                return;
++        }
++
+         auto const event = mouse_event_from_gesture_click(EventBase::Type::eMOUSE_PRESS,
+                                                           gesture,
+                                                           press_count,
