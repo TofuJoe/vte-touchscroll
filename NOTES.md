@@ -1,6 +1,6 @@
 # Touchscreen scrolling for VTE (Ptyxis) — Fedora 44, GNOME Wayland
 
-VTE is LGPL-2.1-or-later (`gitlab.gnome.org/GNOME/vte`), Ptyxis is GPL-3.0. This tree is
+VTE is LGPL-3.0-or-later (`gitlab.gnome.org/GNOME/vte`), Ptyxis is GPL-3.0. This tree is
 upstream tag **0.84.0**, matching Fedora's `vte291-gtk4-0.84.0-1.fc44`, plus one patch.
 
 ## The bug
