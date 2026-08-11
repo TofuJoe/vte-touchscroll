@@ -1,3 +1,20 @@
+> ### Unofficial fork — not a GNOME project repository
+>
+> This is a personal patch fork of [GNOME VTE](https://gitlab.gnome.org/GNOME/vte).
+> It is **not affiliated with, endorsed by, or supported by the GNOME Project.**
+>
+> It is upstream tag **0.84.0** plus one ~30-line patch that restores touchscreen
+> drag-scrolling under GTK4 — see **[NOTES.md](NOTES.md)** for the bug, the patch,
+> and the measurements. The GitLab CI configuration in this tree is upstream's and
+> is inert here.
+>
+> **Do not file issues here.** For releases, bug reports, or anything official, go
+> upstream: <https://gitlab.gnome.org/GNOME/vte>
+>
+> VTE is LGPL-3.0-or-later; this fork keeps that license. Upstream's README follows.
+
+---
+
 Virtual TErminal
 ================
 
